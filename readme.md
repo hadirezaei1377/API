@@ -6,4 +6,5 @@ In general, this format determines the structure for us.
 
 Also, to send a request to the API, we must have a test client that uses postman.
 
+we use Echo framework for running server
 
