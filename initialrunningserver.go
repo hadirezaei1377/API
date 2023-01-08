@@ -1,5 +1,7 @@
 package main
 
+/*
+
 import "github.com/labstack/echo/v4"
 
 // runnig server by echo framework
@@ -16,3 +18,5 @@ func main() {
 	// run server on localhost
 	e.Start("localhost:3124")
 }
+
+*/
