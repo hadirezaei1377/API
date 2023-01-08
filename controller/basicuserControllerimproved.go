@@ -1,5 +1,7 @@
 package controller
 
+/*
+
 import (
 	"net/http"
 	"os/user"
@@ -32,3 +34,5 @@ func GetUserList(c echo.Context) error {
 	return c.JSON(http.StatusOK, userList, "")
 
 }
+
+*/
