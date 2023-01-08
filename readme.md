@@ -18,7 +18,14 @@ Whenever we want to transfer data from one place to another, we need to format i
   These structures are placed inside the model folder and make the implementation of the project easier.
 
 config folder :
+Everything that is related to before the project is executed and the project should be executed against it is placed in the config.
 Any settings that are related to the running part of the project are placed here, for example, the information of a file should be read in a part, we put the settings related to this operation in this folder.
 
 database folder :
 Any information or operation related to storage and retrieval from the database is placed here.
+
+routing :
+Where and to what address are the requests sent and which department should respond to them in what way.
+
+middleware :
+Items to be applied to each request or response
