@@ -29,3 +29,10 @@ Where and to what address are the requests sent and which department should resp
 
 middleware :
 Items to be applied to each request or response
+
+usercontroller file :
+moving routing to general state for using easier 
+assign response to approprate request by using routing
+
+model folder :
+anything related to database that we wil use , puted here
