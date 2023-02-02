@@ -11,6 +11,7 @@ type UserService interface {
 }
 
 // private struct for main userservice
+// controller and other packages dont have an access to it
 type userService struct {
 }
 
