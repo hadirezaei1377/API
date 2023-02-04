@@ -90,3 +90,20 @@ func (userRepository userRepository) GetUserById(id string) (user.User, error) {
 
 }
 */
+
+/*
+create from CRUD
+insert a user
+
+func (userRepository userRepository) InsertUser(user user.User) (string, error) {
+	userCollection := userRepository.db.GetUserCollection()
+	res, err := userCollection.InsertOne(context.TODO(), user)
+
+	if err != nil {
+		return "", err
+	}
+	objectId := res.InsertedID.(primitive.ObjectID).Hex()
+	return objectId, nil
+}
+
+*/
