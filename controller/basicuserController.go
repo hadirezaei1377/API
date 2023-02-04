@@ -1,5 +1,7 @@
 package controller
 
+/*
+
 import (
 	"fmt"
 	"net/http"
@@ -48,3 +50,5 @@ func CreateUser(c echo.Context) error {
 	fmt.Println(userInput)
 	return c.String(http.StatusOK, "/users/CreateUser")
 }
+
+*/
