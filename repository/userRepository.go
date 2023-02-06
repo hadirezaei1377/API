@@ -118,9 +118,10 @@ func (userRepository userRepository) UpdateUserById(user user.User) error {
 	if err != nil {
 		return err
 	}
-	user.Id = ""
+	user.Id = "" // from db field
 	userCollection := userRepository.db.GetUserCollection()
 	_, err = userCollection.UpdateOne(context.TODO(), bson.D{{"_id", objectId}}, bson.D{{"$set", user}})
+	// $ used in mongodb ,showing fields
 
 	if err != nil {
 		return err
@@ -128,5 +129,26 @@ func (userRepository userRepository) UpdateUserById(user user.User) error {
 
 	return nil
 }
+
+
+
+delete :
+
+func (userRepository userRepository) DeleteUserById(id string) error {
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	userCollection := userRepository.db.GetUserCollection()
+	_, err = userCollection.DeleteOne(context.TODO(), bson.D{{"_id", objectId}})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 
 */
