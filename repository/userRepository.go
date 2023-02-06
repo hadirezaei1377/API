@@ -106,4 +106,27 @@ func (userRepository userRepository) InsertUser(user user.User) (string, error) 
 	return objectId, nil
 }
 
+
+update :
+
+add age field to db
+we should set it in database based on db documantaion and set codes here
+
+
+func (userRepository userRepository) UpdateUserById(user user.User) error {
+	objectId, err := primitive.ObjectIDFromHex(user.Id)
+	if err != nil {
+		return err
+	}
+	user.Id = ""
+	userCollection := userRepository.db.GetUserCollection()
+	_, err = userCollection.UpdateOne(context.TODO(), bson.D{{"_id", objectId}}, bson.D{{"$set", user}})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 */
