@@ -39,3 +39,5 @@ anything related to database that we wil use , puted here
 
 we can make a conditions that users produced by API and save in database .
 all things needed exist in user.go file like 	Id, FirstName, LastName ,Email ,UserName ,Password ,RegisterDate .
+
+in routing we create post for storage in database
