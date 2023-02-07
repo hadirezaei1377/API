@@ -1,11 +1,6 @@
 package controller
 
-import (
-	"API/service"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
-)
+/*
 
 func GetUserList(c echo.Context) error {
 
@@ -20,6 +15,7 @@ func GetUserList(c echo.Context) error {
 func CreateNewUser(c echo.Context) error {
 	newUser := new(userViewModel.CreateNewUserViewModel)
 
+	// ** bind info from client to that struct
 	if err := c.Bind(newUser); err != nil {
 		c.JSON(http.StatusBadRequest, "")
 	}
@@ -38,3 +34,6 @@ func CreateNewUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, userResData)
 }
+
+
+*/

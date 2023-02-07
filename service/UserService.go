@@ -1,5 +1,7 @@
 package service
 
+/*
+
 // service for improrve the Project architecture
 
 import "API/model/user"
@@ -45,3 +47,50 @@ func (userService) GetUserList() ([]user.User, error) {
 
 	return userList, nil
 }
+
+
+*/
+
+// bind user
+
+/*
+
+
+type UserService interface {
+	GetUserList() ([]user.User, error)
+	CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error)
+}
+
+type userService struct {
+}
+
+func NewUserService() UserService {
+	return userService{}
+}
+
+func (userService) GetUserList() ([]user.User, error) {
+
+	userRepository := repository.NewUserRepository()
+	userList, err := userRepository.GetUserList()
+
+	return userList, err
+}
+
+func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error) {
+
+	userEntity := user.User{
+		FirstName:    userInput.FirstName,
+		LastName:     userInput.LastName,
+		Email:        userInput.Email,
+		UserName:     userInput.UserName,
+		Password:     userInput.Password,
+		RegisterDate: time.Now(),
+	}
+
+	userRepository := repository.NewUserRepository()
+	userId, err := userRepository.InsertUser(userEntity)
+
+	return userId, err
+}
+
+*/

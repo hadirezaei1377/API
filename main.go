@@ -1,5 +1,7 @@
 package main
 
+/*
+
 import (
 	"API/config"
 	"API/routing"
@@ -24,11 +26,11 @@ func main() {
 	server := echo.New()
 
 	// server jobs
-	/*
+
 	   // know your routes
 	   // set  middleware
 
-	*/
+
 
 	// routing
 	routing.SetRouting(server)
@@ -36,3 +38,5 @@ func main() {
 	// start server or implement it
 	server.Start(":" + config.AppConfig.Server.Port)
 }
+
+*/

@@ -1,5 +1,7 @@
 package routing
 
+/*
+
 import (
 	"API/controller"
 
@@ -15,3 +17,5 @@ func SetRouting(e *echo.Echo) error {
 
 	return nil
 }
+
+*/
