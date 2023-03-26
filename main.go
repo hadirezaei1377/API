@@ -24,7 +24,7 @@ func main() {
 
 	// init server or create it
 	server := echo.New()
-
+    server.Validator = &Utility.CustomValidator{Validator: validator.New()}
 	// server jobs
 
 	   // know your routes

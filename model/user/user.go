@@ -20,6 +20,8 @@ import (
 	"time"
 )
 
+// anythings that users send for server(like this struct) must be validated by validator
+// The validator must be set(initialize) on the server
 type User struct {
 	Id           string    `bson:"_id,omitempty"`
 	FirstName    string    `bson:"firstName,omitempty"`
