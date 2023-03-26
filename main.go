@@ -24,6 +24,7 @@ func main() {
 
 	// init server or create it
 	server := echo.New()
+	// Setting the validator on the server
     server.Validator = &Utility.CustomValidator{Validator: validator.New()}
 	// server jobs
 

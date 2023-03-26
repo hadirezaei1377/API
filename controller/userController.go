@@ -20,6 +20,14 @@ func CreateNewUser(c echo.Context) error {
 		c.JSON(http.StatusBadRequest, "")
 	}
 
+
+	// when we are binding data we must validate
+
+if err := c.Validate(newUser); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+
 	userService := service.NewUserService()
 	newUserId, err := userService.CreateNewUser(*newUser)
 	if err != nil {
