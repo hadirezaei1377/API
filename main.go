@@ -11,6 +11,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// related to middlewares
+func RootLevel(next echo.HandlerFunc) echo.HandlerFunc {
+	fmt.Println("RootLevel")
+	return next
+}
+
+func AfterRouter(next echo.HandlerFunc) echo.HandlerFunc {
+	fmt.Println("AfterRouter")
+	return next
+}
+
+
+// next is a paramter that will be passed to next middlewares
+
 // The initial architecture of the project
 
 func main() {
@@ -30,6 +44,9 @@ func main() {
 
 	   // know your routes
 	   // set  middleware
+	     // creating middleware
+		 server.Pre(RootLevel)
+	     server.Use(AfterRouter)
 
 
 
