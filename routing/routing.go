@@ -33,6 +33,13 @@ func SetRouting(e *echo.Echo) error {
 
 	g := e.Group("users", GroupLevel)
 
+
+	// using jwt and middlewares
+	  // first step ; log in the client , it needs a new route
+	  e.POST("/login", controller.LoginUser)
+
+
+
 	g.GET("/getList", controller.GetUserList, RouteLevel, RouteLevel2, RouteLevel3)
 	g.POST("/CreateNewUser", controller.CreateNewUser)
 

@@ -41,6 +41,18 @@ if err := c.Validate(newUser); err != nil {
 	}
 
 	return c.JSON(http.StatusOK, userResData)
+
+	// jwt and middlewares
+	func LoginUser(c echo.Context) error {
+	loginModel := new(userViewModel.LoginUserViewModel)
+
+	if err := c.Bind(loginModel); err != nil {
+		return c.JSON(http.StatusBadRequest, "")
+	}
+
+	if err := c.Validate(loginModel); err != nil {
+		return c.JSON(http.StatusBadRequest, "Model not Valid")
+	}
 }
 
 

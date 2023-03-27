@@ -49,6 +49,10 @@ func main() {
 	     server.Use(AfterRouter)
 
 
+		 // ratelimiter ; related to middlewares
+		 // number of requests that specefic ip can send for our service
+	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(1)))
+
 
 	// routing
 	routing.SetRouting(server)
