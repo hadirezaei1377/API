@@ -52,6 +52,33 @@ if err := c.Validate(newUser); err != nil {
 
 	if err := c.Validate(loginModel); err != nil {
 		return c.JSON(http.StatusBadRequest, "Model not Valid")
+
+		// we have a claims that is a jwtclaim in security
+		// feed its fields(the info that exsist in log in info)
+		claims := &security.JwtClaims{
+		loginModel.UserName,
+
+		// feed another field
+		jwt.StandardClaims{
+			// take now and add be right for 24 hours and change it to unix
+			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+		},
+	}
+
+	// create token
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// encode our token
+	stringToken, err := token.SignedString([]byte("secret")) // show the tokens string
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	// take created token to client
+	return c.JSON(http.StatusOK, echo.Map{
+		"token": stringToken,
+	})
+}
 	}
 }
 
