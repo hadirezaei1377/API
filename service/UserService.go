@@ -59,6 +59,7 @@ func (userService) GetUserList() ([]user.User, error) {
 type UserService interface {
 	GetUserList() ([]user.User, error)
 	CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error)
+	GetUserByUserNameAndPassword(loginViewModel userViewModel.LoginUserViewModel) (user.User, error)
 }
 
 type userService struct {
@@ -75,6 +76,16 @@ func (userService) GetUserList() ([]user.User, error) {
 
 	return userList, err
 }
+
+// related to authentication
+func (userService) GetUserByUserNameAndPassword(loginViewModel userViewModel.LoginUserViewModel) (user.User, error) {
+
+	userRepository := repository.NewUserRepository()
+	user, err := userRepository.GetUserByUserNameAndPassword(loginViewModel.UserName, loginViewModel.Password)
+
+	return user, err
+}
+
 
 func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error) {
 

@@ -13,6 +13,7 @@ import (
 
 type UserRepository interface {
 	GetUserList() ([]user.User, error)
+	GetUserByUserNameAndPassword(username, password string) (user.User, error)
 }
 
 type userRepository struct {

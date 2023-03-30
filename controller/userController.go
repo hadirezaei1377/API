@@ -28,6 +28,11 @@ if err := c.Validate(newUser); err != nil {
 	}
 
 
+	// get claims from JWT
+	token := c.Get("user").(*jwt.Token)
+	claim := token.Claims.(*security.JwtClaims)
+	newUser.CreatorUserId = claim.UserId
+
 	userService := service.NewUserService()
 	newUserId, err := userService.CreateNewUser(*newUser)
 	if err != nil {
@@ -41,6 +46,15 @@ if err := c.Validate(newUser); err != nil {
 	}
 
 	return c.JSON(http.StatusOK, userResData)
+
+
+
+
+
+	// Authentication , before create a token  : set usernames and check passwords
+
+
+
 
 	// jwt and middlewares
 	func LoginUser(c echo.Context) error {
@@ -64,6 +78,8 @@ if err := c.Validate(newUser); err != nil {
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		},
 	}
+
+
 
 	// create token
 

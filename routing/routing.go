@@ -41,7 +41,16 @@ func SetRouting(e *echo.Echo) error {
 
 
 	g.GET("/getList", controller.GetUserList, RouteLevel, RouteLevel2, RouteLevel3)
-	g.POST("/CreateNewUser", controller.CreateNewUser)
+
+	// jwt
+	// just loged in clients can have jwt token
+	jwtConfig := middleware.JWTConfig{
+		SigningKey: []byte("secret"),
+		Claims:     &security.JwtClaims{},
+	}
+
+
+		g.POST("/CreateNewUser", controller.CreateNewUser, middleware.JWTWithConfig(jwtConfig))
 
 	return nil
 }
