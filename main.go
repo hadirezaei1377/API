@@ -53,6 +53,15 @@ func main() {
 		 // number of requests that specefic ip can send for our service
 	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(1)))
 
+	// using additional methods to custom context as a middleware
+		server.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			apiContext := &Utility.ApiContext{Context: c}
+
+			return next(apiContext)
+		}
+	})
+
 
 	// routing
 	routing.SetRouting(server)
