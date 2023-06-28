@@ -1,8 +1,21 @@
 package controller
 
-/*
+import (
+	"API/Utility"
+	"API/ViewModel/common/security"
+	userViewModel "API/ViewModel/user"
+	"API/service"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/golang-jwt/jwt"
+	"github.com/labstack/echo/v4"
+)
 
 func GetUserList(c echo.Context) error {
+	apiContext := c.(*Utility.ApiContext)
+	fmt.Println(apiContext.GetUserId())
 
 	userService := service.NewUserService()
 	userList, err := userService.GetUserList()
@@ -13,25 +26,24 @@ func GetUserList(c echo.Context) error {
 	return c.JSON(http.StatusOK, userList)
 }
 func CreateNewUser(c echo.Context) error {
+	apiContext := c.(*Utility.ApiContext)
+
 	newUser := new(userViewModel.CreateNewUserViewModel)
 
-	// ** bind info from client to that struct
 	if err := c.Bind(newUser); err != nil {
-		c.JSON(http.StatusBadRequest, "")
+		return c.JSON(http.StatusBadRequest, "")
 	}
 
-
-	// when we are binding data we must validate
-
-if err := c.Validate(newUser); err != nil {
+	if err := c.Validate(newUser); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
+	creator, err := apiContext.GetUserId()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "")
+	}
 
-	// get claims from JWT
-	token := c.Get("user").(*jwt.Token)
-	claim := token.Claims.(*security.JwtClaims)
-	newUser.CreatorUserId = claim.UserId
+	newUser.CreatorUserId = creator
 
 	userService := service.NewUserService()
 	newUserId, err := userService.CreateNewUser(*newUser)
@@ -46,18 +58,9 @@ if err := c.Validate(newUser); err != nil {
 	}
 
 	return c.JSON(http.StatusOK, userResData)
+}
 
-
-
-
-
-	// Authentication , before create a token  : set usernames and check passwords
-
-
-
-
-	// jwt and middlewares
-	func LoginUser(c echo.Context) error {
+func LoginUser(c echo.Context) error {
 	loginModel := new(userViewModel.LoginUserViewModel)
 
 	if err := c.Bind(loginModel); err != nil {
@@ -66,37 +69,29 @@ if err := c.Validate(newUser); err != nil {
 
 	if err := c.Validate(loginModel); err != nil {
 		return c.JSON(http.StatusBadRequest, "Model not Valid")
+	}
 
-		// we have a claims that is a jwtclaim in security
-		// feed its fields(the info that exsist in log in info)
-		claims := &security.JwtClaims{
-		loginModel.UserName,
+	userService := service.NewUserService()
+	user, err := userService.GetUserByUserNameAndPassword(*loginModel)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "User Not found")
+	}
 
-		// feed another field
+	claims := &security.JwtClaims{
+		user.UserName,
+		user.Id,
 		jwt.StandardClaims{
-			// take now and add be right for 24 hours and change it to unix
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		},
 	}
 
-
-
-	// create token
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// encode our token
-	stringToken, err := token.SignedString([]byte("secret")) // show the tokens string
+	stringToken, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	// take created token to client
 	return c.JSON(http.StatusOK, echo.Map{
 		"token": stringToken,
 	})
 }
-	}
-}
-
-
-*/

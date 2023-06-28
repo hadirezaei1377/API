@@ -1,73 +1,61 @@
 package main
 
-/*
-
 import (
+	"API/Utility"
+	"API/ViewModel/common/security"
 	"API/config"
 	"API/routing"
 	"fmt"
 	"log"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
-// related to middlewares
 func RootLevel(next echo.HandlerFunc) echo.HandlerFunc {
 	fmt.Println("RootLevel")
 	return next
 }
-
 func AfterRouter(next echo.HandlerFunc) echo.HandlerFunc {
 	fmt.Println("AfterRouter")
 	return next
 }
 
-
-// next is a paramter that will be passed to next middlewares
-
-// The initial architecture of the project
-
 func main() {
 
-	// get config , Recall information about the config
+	// config
 	err := config.GetConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}
 	fmt.Println("Server port : ", config.AppConfig.Server.Port)
 
-	// init server or create it
+	//init server
 	server := echo.New()
-	// Setting the validator on the server
-    server.Validator = &Utility.CustomValidator{Validator: validator.New()}
-	// server jobs
+	server.Validator = &Utility.CustomValidator{Validator: validator.New()}
 
-	   // know your routes
-	   // set  middleware
-	     // creating middleware
-		 server.Pre(RootLevel)
-	     server.Use(AfterRouter)
+	//routing
+	routing.SetRouting(server)
 
-
-		 // ratelimiter ; related to middlewares
-		 // number of requests that specefic ip can send for our service
-	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(1)))
-
-	// using additional methods to custom context as a middleware
-		server.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+	//middleware
+	server.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			apiContext := &Utility.ApiContext{Context: c}
 
 			return next(apiContext)
 		}
 	})
+	server.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey:             []byte("secret"),
+		Claims:                 &security.JwtClaims{},
+		ContinueOnIgnoredError: true,
+		ErrorHandlerWithContext: func(err error, c echo.Context) error {
+			return nil
+		},
+	}))
+	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(1)))
 
-
-	// routing
-	routing.SetRouting(server)
-
-	// start server or implement it
+	//start server
 	server.Start(":" + config.AppConfig.Server.Port)
 }
-
-*/

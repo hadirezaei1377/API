@@ -1,60 +1,11 @@
 package service
 
-/*
-
-// service for improrve the Project architecture
-
-import "API/model/user"
-
-// an user can user interface for using interface but not the main userservice
-
-type UserService interface {
-	GetUserList() ([]user.User, error)
-}
-
-// private struct for main userservice
-// controller and other packages dont have an access to it
-type userService struct {
-}
-
-// return new user service
-func NewUserService() UserService {
-	return userService{}
-}
-
-// function for organize the list of users instead controller
-func (userService) GetUserList() ([]user.User, error) {
-	userList := []user.User{
-		{
-			FirstName:   "Hadi",
-			LastName:    "Rezaei",
-			Age:         24,
-			PhoneNumber: "09131111111",
-		},
-		{
-			FirstName:   "Khashayar",
-			LastName:    "Rezaei",
-			Age:         35,
-			PhoneNumber: "09911111111",
-		},
-		{
-			FirstName:   "Gisoo",
-			LastName:    "Sotoodeh",
-			Age:         21,
-			PhoneNumber: "09351111111",
-		},
-	}
-
-	return userList, nil
-}
-
-
-*/
-
-// bind user
-
-/*
-
+import (
+	userViewModel "API/ViewModel/user"
+	"API/model/user"
+	"API/repository"
+	"time"
+)
 
 type UserService interface {
 	GetUserList() ([]user.User, error)
@@ -77,7 +28,6 @@ func (userService) GetUserList() ([]user.User, error) {
 	return userList, err
 }
 
-// related to authentication
 func (userService) GetUserByUserNameAndPassword(loginViewModel userViewModel.LoginUserViewModel) (user.User, error) {
 
 	userRepository := repository.NewUserRepository()
@@ -86,16 +36,16 @@ func (userService) GetUserByUserNameAndPassword(loginViewModel userViewModel.Log
 	return user, err
 }
 
-
 func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error) {
 
 	userEntity := user.User{
-		FirstName:    userInput.FirstName,
-		LastName:     userInput.LastName,
-		Email:        userInput.Email,
-		UserName:     userInput.UserName,
-		Password:     userInput.Password,
-		RegisterDate: time.Now(),
+		FirstName:     userInput.FirstName,
+		LastName:      userInput.LastName,
+		Email:         userInput.Email,
+		UserName:      userInput.UserName,
+		Password:      userInput.Password,
+		RegisterDate:  time.Now(),
+		CreatorUserId: userInput.CreatorUserId,
 	}
 
 	userRepository := repository.NewUserRepository()
@@ -103,5 +53,3 @@ func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel)
 
 	return userId, err
 }
-
-*/

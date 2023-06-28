@@ -1,58 +1,26 @@
 package routing
 
-/*
-
 import (
+	"API/ViewModel/common/security"
 	"API/controller"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
-
-// group level middlewares
-func GroupLevel(next echo.HandlerFunc) echo.HandlerFunc {
-	fmt.Println("GroupLevel")
-	return next
-}
-
-// route level middlewares
-// related to get and post in bottom of this file
-func RouteLevel(next echo.HandlerFunc) echo.HandlerFunc {
-	fmt.Println("RouteLevel")
-	return next
-}
-func RouteLevel2(next echo.HandlerFunc) echo.HandlerFunc {
-	fmt.Println("RouteLevel2")
-	return next
-}
-func RouteLevel3(next echo.HandlerFunc) echo.HandlerFunc {
-	fmt.Println("RouteLevel3")
-	return next
-}
 
 func SetRouting(e *echo.Echo) error {
 
-	g := e.Group("users", GroupLevel)
+	e.POST("/login", controller.LoginUser)
 
+	g := e.Group("users")
 
-	// using jwt and middlewares
-	  // first step ; log in the client , it needs a new route
-	  e.POST("/login", controller.LoginUser)
+	g.GET("/getList", controller.GetUserList)
 
-
-
-	g.GET("/getList", controller.GetUserList, RouteLevel, RouteLevel2, RouteLevel3)
-
-	// jwt
-	// just loged in clients can have jwt token
 	jwtConfig := middleware.JWTConfig{
 		SigningKey: []byte("secret"),
 		Claims:     &security.JwtClaims{},
 	}
-
-
-		g.POST("/CreateNewUser", controller.CreateNewUser, middleware.JWTWithConfig(jwtConfig))
+	g.POST("/CreateNewUser", controller.CreateNewUser, middleware.JWTWithConfig(jwtConfig))
 
 	return nil
 }
-
-*/

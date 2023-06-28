@@ -1,8 +1,5 @@
-package utility
+package Utility
 
-/*
-
-// for custom context ... c.any = usecase of context
 import (
 	"API/ViewModel/common/security"
 	"errors"
@@ -11,12 +8,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// do a work that when I want ,I have this ability to add things to my context... like add or remove methods from context
 type ApiContext struct {
 	echo.Context
 }
 
-// add this method
 func (c ApiContext) GetUserId() (userId string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -28,7 +23,3 @@ func (c ApiContext) GetUserId() (userId string, err error) {
 	claim := token.Claims.(*security.JwtClaims)
 	return claim.UserId, nil
 }
-
-// do this commands and this additional methods as a middleware in main.go
-
-*/
