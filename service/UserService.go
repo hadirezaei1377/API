@@ -12,7 +12,10 @@ import (
 type UserService interface {
 	GetUserList() ([]user.User, error)
 	CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error)
+	EditUser(userInput userViewModel.EditUserViewModel) error
+	DeleteUser(id string) error
 	GetUserByUserNameAndPassword(loginViewModel userViewModel.LoginUserViewModel) (user.User, error)
+	IsUserExist(id string) bool
 	IsUserValidForAccess(userId, roleName string) bool
 }
 
@@ -56,6 +59,17 @@ func (userService) IsUserValidForAccess(userId, roleName string) bool {
 
 	return roleIndex >= 0
 }
+func (userService) IsUserExist(id string) bool {
+
+	userRepository := repository.NewUserRepository()
+	_, err := userRepository.GetUserById(id)
+
+	if err != nil {
+		return false
+	}
+
+	return true
+}
 
 func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel) (string, error) {
 
@@ -73,4 +87,27 @@ func (userService) CreateNewUser(userInput userViewModel.CreateNewUserViewModel)
 	userId, err := userRepository.InsertUser(userEntity)
 
 	return userId, err
+}
+
+func (userService) EditUser(userInput userViewModel.EditUserViewModel) error {
+	userEntity := user.User{
+		Id:        userInput.TargetUserId,
+		FirstName: userInput.FirstName,
+		LastName:  userInput.LastName,
+		Email:     userInput.Email,
+		UserName:  userInput.UserName,
+		Password:  userInput.Password,
+	}
+
+	userRepository := repository.NewUserRepository()
+	err := userRepository.UpdateUserById(userEntity)
+
+	return err
+}
+func (userService) DeleteUser(id string) error {
+
+	userRepository := repository.NewUserRepository()
+	err := userRepository.DeleteUserById(id)
+
+	return err
 }
