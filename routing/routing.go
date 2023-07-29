@@ -13,66 +13,26 @@ import (
 
 func SetRouting(e *echo.Echo) error {
 
-	e.POST("/login", controller.LoginUser)
+	userController := controller.NewUserController()
+	accountController := controller.NewAccountController()
+
+	e.POST("/login", accountController.LoginUser)
 
 	g := e.Group("users")
 
-	g.GET("/getList", controller.GetUserList)
+	g.GET("/getList", userController.GetUserList)
 
 	jwtConfig := middleware.JWTConfig{
 		SigningKey: []byte("secret"),
 		Claims:     &security.JwtClaims{},
 	}
-	g.POST("/CreateNewUser", controller.CreateNewUser, PermissionChecker("CreateUser"), middleware.JWTWithConfig(jwtConfig))
+	g.POST("/CreateNewUser", userController.CreateNewUser, PermissionChecker("CreateUser"), middleware.JWTWithConfig(jwtConfig))
 
-	g.PUT("/EditUser/:id", controller.EditUser, PermissionChecker("EditUser"), middleware.JWTWithConfig(jwtConfig))
-	g.DELETE("/DeleteUser/:id", controller.DeleteUser, PermissionChecker("DeleteUser"), middleware.JWTWithConfig(jwtConfig))
+	g.PUT("/EditUser/:id", userController.EditUser, PermissionChecker("EditUser"), middleware.JWTWithConfig(jwtConfig))
+	g.DELETE("/DeleteUser/:id", userController.DeleteUser, PermissionChecker("DeleteUser"), middleware.JWTWithConfig(jwtConfig))
 
-	return nil
-}
-func PermissionChecker(permission string) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			apiContext := c.(*Utility.ApiContext)
-
-			operatorUserId, err := apiContext.GetUserId()
-			if err != nil {
-				return &echo.HTTPError{
-					Code:     401,
-					Message:  http.StatusUnauthorized,
-					Internal: err,
-				}
-			}
-
-			userService := service.NewUserService()
-			isValid := userService.IsUserValidForAccess(operatorUserId, permission)
-			if !isValid {
-				return &echo.HTTPError{
-					Code:    403,
-					Message: http.StatusForbidden,
-				}
-			}
-
-			return next(c)
-		}
-	}
-}
-func SetRouting(e *echo.Echo) error {
-
-	e.POST("/login", controller.LoginUser)
-
-	g := e.Group("users")
-
-	g.GET("/getList", controller.GetUserList)
-
-	jwtConfig := middleware.JWTConfig{
-		SigningKey: []byte("secret"),
-		Claims:     &security.JwtClaims{},
-	}
-	g.POST("/CreateNewUser", controller.CreateNewUser, PermissionChecker("CreateUser"), middleware.JWTWithConfig(jwtConfig))
-
-	g.PUT("/EditUser/:id", controller.EditUser, PermissionChecker("EditUser"), middleware.JWTWithConfig(jwtConfig))
-	g.DELETE("/DeleteUser/:id", controller.DeleteUser, PermissionChecker("DeleteUser"), middleware.JWTWithConfig(jwtConfig))
+	g.PUT("/EditUserRole/:id", userController.EditUserRole, middleware.JWTWithConfig(jwtConfig))
+	g.PUT("/EditUserPassword/:id", userController.EditUserPassword, middleware.JWTWithConfig(jwtConfig))
 
 	return nil
 }

@@ -2,11 +2,11 @@ package user
 
 type CreateNewUserViewModel struct {
 	LastName      string `validate:"required"`
-	FirstName     string `validate:"required"`
-	Email         string `validate:"required"`
-	UserName      string `validate:"required"`
-	Password      string `validate:"required"`
-	CreatorUserId string `validate:"required"`
+	FirstName     string
+	Email         string
+	UserName      string
+	Password      string
+	CreatorUserId string
 }
 type EditUserViewModel struct {
 	TargetUserId string
@@ -14,5 +14,13 @@ type EditUserViewModel struct {
 	FirstName    string `validate:"required"`
 	Email        string `validate:"required"`
 	UserName     string `validate:"required"`
+	Password     string `validate:"required"`
+}
+type EditUserRoleViewModel struct {
+	TargetUserId string
+	Roles        []string `validate:"required"`
+}
+type EditUserPasswordViewModel struct {
+	TargetUserId string
 	Password     string `validate:"required"`
 }

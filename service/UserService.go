@@ -17,6 +17,10 @@ type UserService interface {
 	GetUserByUserNameAndPassword(loginViewModel userViewModel.LoginUserViewModel) (user.User, error)
 	IsUserExist(id string) bool
 	IsUserValidForAccess(userId, roleName string) bool
+	EditUserPassword(userInput userViewModel.EditUserPasswordViewModel) error
+	//region Role
+	EditUserRole(userInput userViewModel.EditUserRoleViewModel) error
+	//end region Role
 }
 
 type userService struct {
@@ -108,6 +112,30 @@ func (userService) DeleteUser(id string) error {
 
 	userRepository := repository.NewUserRepository()
 	err := userRepository.DeleteUserById(id)
+
+	return err
+}
+
+func (userService) EditUserRole(userInput userViewModel.EditUserRoleViewModel) error {
+	userEntity := user.User{
+		Id:    userInput.TargetUserId,
+		Roles: userInput.Roles,
+	}
+
+	userRepository := repository.NewUserRepository()
+	err := userRepository.UpdateUserById(userEntity)
+
+	return err
+}
+
+func (userService) EditUserPassword(userInput userViewModel.EditUserPasswordViewModel) error {
+	userEntity := user.User{
+		Id:       userInput.TargetUserId,
+		Password: userInput.Password,
+	}
+
+	userRepository := repository.NewUserRepository()
+	err := userRepository.UpdateUserById(userEntity)
 
 	return err
 }
