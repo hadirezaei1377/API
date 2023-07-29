@@ -14,6 +14,7 @@ func SuccessResponse(Data interface{}) HttpResponse {
 	}
 }
 
+// error for clients
 func ErrorResponse(Data interface{}, errorMessage string) HttpResponse {
 	return HttpResponse{
 		ResCode:    "500",
@@ -21,6 +22,8 @@ func ErrorResponse(Data interface{}, errorMessage string) HttpResponse {
 		Data:       Data,
 	}
 }
+
+// error for clients
 func NotFoundResponse(Data interface{}, errorMessage string) HttpResponse {
 	return HttpResponse{
 		ResCode:    "404",
