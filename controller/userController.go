@@ -7,9 +7,14 @@ import (
 	"API/service"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/labstack/echo/v4"
+
+	"tAPI/service"
 )
 
 type UserController interface {
@@ -19,6 +24,7 @@ type UserController interface {
 	DeleteUser(c echo.Context) error
 	EditUserRole(c echo.Context) error
 	EditUserPassword(c echo.Context) error
+	UploadAvatar(c echo.Context) error
 }
 
 type userController struct {
@@ -62,6 +68,29 @@ func (uc userController) CreateNewUser(c echo.Context) error {
 
 	if err := c.Validate(newUser); err != nil {
 		return c.JSON(http.StatusBadRequest, httpResponse.SuccessResponse(err))
+	}
+
+	file, err := apiContext.FormFile("file")
+	if err == nil {
+		src, err := file.Open()
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		wd, err := os.Getwd()
+		imageServerPath := filepath.Join(wd, "wwwroot", "images", "userAvatar", "dcfvgbhnjm"+filepath.Ext(file.Filename))
+
+		des, err := os.Create(imageServerPath)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+		defer des.Close()
+
+		_, err = io.Copy(des, src)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+		newUser.AvatarName = "dcfvgbhnjm" + filepath.Ext(file.Filename)
 	}
 
 	newUser.CreatorUserId = operatorUserId
@@ -193,6 +222,42 @@ func (uc userController) EditUserPassword(c echo.Context) error {
 	}
 
 	err := userService.EditUserPassword(*newUserData)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	userResData := struct {
+		IsSuccess bool
+	}{
+		IsSuccess: true,
+	}
+
+	return c.JSON(http.StatusOK, userResData)
+}
+
+func (uc userController) UploadAvatar(c echo.Context) error {
+	apiContext := c.(*Utility.ApiContext)
+
+	file, err := apiContext.FormFile("file")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	wd, err := os.Getwd()
+	imageServerPath := filepath.Join(wd, "wwwroot", "images", "userAvatar", file.Filename)
+
+	des, err := os.Create(imageServerPath)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	defer des.Close()
+
+	_, err = io.Copy(des, src)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
