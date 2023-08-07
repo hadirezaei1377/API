@@ -55,10 +55,10 @@ func (uc userController) CreateNewUser(c echo.Context) error {
 	}
 
 	userService := service.NewUserService()
-	isValid := userService.IsUserValidForAccess(operatorUserId, "CreateUser")
-	if !isValid {
-		return c.JSON(http.StatusForbidden, "")
-	}
+	//isValid := userService.IsUserValidForAccess(operatorUserId, "CreateUser")
+	//if !isValid {
+	//	return c.JSON(http.StatusForbidden, "")
+	//}
 
 	newUser := new(userViewModel.CreateNewUserViewModel)
 
