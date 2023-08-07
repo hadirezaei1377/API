@@ -5,17 +5,14 @@ import (
 	"API/ViewModel/common/httpResponse"
 	"API/service"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
 type NewsController interface {
 	GetNewsList(c echo.Context) error
+	CreateNews(c echo.Context) error
 }
 
 type newsController struct {
@@ -51,34 +48,12 @@ func (nc newsController) CreateNews(c echo.Context) error {
 	}
 
 	file, err := apiContext.FormFile("file")
-	if err == nil {
-		src, err := file.Open()
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-
-		fileName := uuid.New().String() + filepath.Ext(file.Filename)
-
-		wd, err := os.Getwd()
-		imageServerPath := filepath.Join(wd, "wwwroot", "images", "news", fileName)
-
-		des, err := os.Create(imageServerPath)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-		defer des.Close()
-
-		_, err = io.Copy(des, src)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-		newNews.ImageName = fileName
-	} else {
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, httpResponse.SuccessResponse("image not found"))
 	}
 
 	newsService := service.NewNewsService()
-	newNewsId, err := newsService.CreateNewUser(*newNews)
+	newNewsId, err := newsService.CreateNewUser(*newNews, file)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
