@@ -15,8 +15,10 @@ func SetRouting(e *echo.Echo) error {
 
 	userController := controller.NewUserController()
 	accountController := controller.NewAccountController()
+	newsController := controller.NewNewsController()
 
 	e.POST("/login", accountController.LoginUser)
+	e.POST("/UploadAvatar", userController.UploadAvatar)
 
 	g := e.Group("users")
 
@@ -33,6 +35,10 @@ func SetRouting(e *echo.Echo) error {
 
 	g.PUT("/EditUserRole/:id", userController.EditUserRole, middleware.JWTWithConfig(jwtConfig))
 	g.PUT("/EditUserPassword/:id", userController.EditUserPassword, middleware.JWTWithConfig(jwtConfig))
+
+	newsGroup := e.Group("news")
+
+	newsGroup.GET("/getList", newsController.GetNewsList)
 
 	return nil
 }

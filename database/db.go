@@ -8,6 +8,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+package database
+
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
+)
+
 type Db struct {
 	client *mongo.Client
 }
@@ -41,6 +50,11 @@ func Connect() (Db, error) {
 
 func (db Db) GetUserCollection() *mongo.Collection {
 	userCollection := db.client.Database("toplearn-api-golang").Collection("users")
+
+	return userCollection
+}
+func (db Db) GetNewsCollection() *mongo.Collection {
+	userCollection := db.client.Database("toplearn-api-golang").Collection("news")
 
 	return userCollection
 }
