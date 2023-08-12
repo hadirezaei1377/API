@@ -13,8 +13,6 @@ import (
 	"path/filepath"
 
 	"github.com/labstack/echo/v4"
-
-	"tAPI/service"
 )
 
 type UserController interface {

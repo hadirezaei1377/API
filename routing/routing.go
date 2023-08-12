@@ -48,4 +48,6 @@ func RouteNewsController(e *echo.Echo) {
 	newsGroup := e.Group("news")
 
 	newsGroup.GET("/getList", newsController.GetNewsList)
+	newsGroup.POST("/Create", newsController.CreateNews)
+	newsGroup.POST("/Edit/:id", newsController.EditNews)
 }

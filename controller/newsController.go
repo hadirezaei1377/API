@@ -3,16 +3,19 @@ package controller
 import (
 	"API/Utility"
 	"API/ViewModel/common/httpResponse"
+	newsViewModel "API/ViewModel/news"
 	"API/service"
 	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pkg/errors"
 )
 
 type NewsController interface {
 	GetNewsList(c echo.Context) error
 	CreateNews(c echo.Context) error
+	EditNews(c echo.Context) error
 }
 
 type newsController struct {
@@ -65,4 +68,35 @@ func (nc newsController) CreateNews(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, httpResponse.SuccessResponse(userResData))
+}
+func (nc newsController) EditNews(c echo.Context) error {
+	apiContext := c.(*Utility.ApiContext)
+	targetNewsId := apiContext.Param("id")
+
+	editNews := new(newsViewModel.EditNewsViewModel)
+
+	if err := apiContext.Bind(editNews); err != nil {
+		return c.JSON(http.StatusBadRequest, httpResponse.SuccessResponse("Data not found"))
+	}
+
+	if err := c.Validate(editNews); err != nil {
+		return c.JSON(http.StatusBadRequest, httpResponse.SuccessResponse(err))
+	}
+
+	file, err := apiContext.FormFile("file")
+
+	editNews.Id = targetNewsId
+
+	newsService := service.NewNewsService()
+
+	if !newsService.IsNewsExist(targetNewsId) {
+		return c.JSON(http.StatusBadRequest, errors.New("User Not Found"))
+	}
+
+	err = newsService.EditNews(*editNews, file)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	return c.JSON(http.StatusOK, httpResponse.SuccessResponse(nil))
 }
