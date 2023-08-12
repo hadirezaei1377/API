@@ -8,15 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-package database
-
-import (
-	"context"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
-)
-
 type Db struct {
 	client *mongo.Client
 }

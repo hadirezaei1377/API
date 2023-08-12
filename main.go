@@ -46,6 +46,7 @@ func main() {
 			return next(apiContext)
 		}
 	})
+
 	server.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey:             []byte("secret"),
 		Claims:                 &security.JwtClaims{},

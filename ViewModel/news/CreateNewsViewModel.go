@@ -7,7 +7,6 @@ type CreateNewsViewModel struct {
 	ImageName        string
 	CreatorUserId    string
 }
-
 type EditNewsViewModel struct {
 	Id               string
 	Title            string `form:"Title" validate:"required"`
